@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>BankApp</title>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="header">
+        <p class="header__text">Login to get started</p>
+        <img src="img/bank.png" class="logo" alt="BankApp Logo">
+        <form class="login">
+            <input class="login__input login__username" type="text" placeholder="Username">
+            <input class="login__input login__password" type="password" maxlength="4" placeholder="Password">
+            <button class="login__btn">&rarr;</button>
+        </form>
+    </header>
+
+    <!-- APP -->
+    <main class="app">
+        <div class="container app__container">
+            <!-- BALANCE -->
+            <div class="balance">
+                <div class="balance__date--info">
+                    <p class="balance__text">Current Balance</p>
+                    <p class="balance__date">As of <span class="date">10/01/2024, 15:40</span></p>
+                </div>
+                <p class="balance__value">6500 €</p>
+            </div>
+
+            <!-- MOVEMENTS -->
+            <div class="movements">
+                <div class="movement">
+                    <p class="movement__type movement__type--deposit">2 Deposit</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--withdrawal">1 Withdrawal</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--deposit">2 Deposit</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--withdrawal">1 Withdrawal</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--deposit">2 Deposit</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--withdrawal">1 Withdrawal</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--deposit">2 Deposit</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--withdrawal">1 Withdrawal</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--deposit">2 Deposit</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+                <div class="movement">
+                    <p class="movement__type movement__type--withdrawal">1 Withdrawal</p>
+                    <p class="movement__date">10/01/2024</p>
+                    <p class="movement__value">200 €</p>
+                </div>
+            </div>
+
+            <div class="operations">
+
+                <!-- OPERATIONS: TRANSFER MONEY -->
+                <div class="operation operation__transfer">
+                    <p>Transfer Money</p>
+                    <form class="form form--transfer">
+                        <input class="form__input form__input--transfer-to" type="text" placeholder="Username">
+                        <input class="form__input form__input--transfer-amount" type="number" placeholder="Value">
+                        <button class="form__btn form__btn--transfer">&rarr;</button>
+                    </form>
+                </div>
+
+                <!-- OPERATIONS: REQUEST LOAN -->
+                <div class="operation operation__loan">
+                    <p>Request Loan</p>
+                    <form class="form form--loan">
+                        <input class="form__input form__input--loan-amount" type="number" placeholder="Value">
+                        <button class="form__btn form__btn--loan">&rarr;</button>
+                    </form>
+                </div>
+                
+                <!-- OPERATIONS: CLOSE ACCOUNT -->
+                <div class="operation operation__close--account">
+                    <p>Close Account</p>
+                    <form class="form form--close">
+                        <input class="form__input form__input--username" type="text" placeholder="Username">
+                        <input class="form__input form__input--password" type="password" placeholder="Password">
+                        <button class="form__btn form__btn--close">&rarr;</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ACCOUNT SUMMARY -->
+            <div class="summary">
+                <p class="summary__label summary__in">IN: <span class="summary__value summary__in--value">600 €</span></p>
+                <p class="summary__label summary__out">OUT: <span class="summary__value summary__out--value">600 €</span></p>
+                <p class="summary__label summary__interest">INTEREST: <span class="summary__value summary__interest--value">600 €</span></p>
+                <button class="summary__btn"> &uparrow; SORT &downarrow;</button>
+            </div>
+
+            <!-- TIMER TO LOGOUT -->
+            <div class="logout--timer">You will be logged out in <span class="timer">00:00</span></div>
+        </div>
+    </main>
+    <!-- FOOTER -->
+    <footer><b>BankApp</b> ©2024</footer>
+    <script src="index.js"></script>
+</body>
+</html>
