@@ -98,7 +98,8 @@ const formatMovementDate = function(date, locale) {
 }
 
 // Format Currency
-const formatCurrency = function(value, locale, currency) {
+const formatCurrency = function(valueData, locale, currency) {
+    const value = typeof valueData === "number" ? valueData : valueData.loanValue;
     return new Intl.NumberFormat(locale, {style: "currency", currency: currency}).format(value);
 }
 
@@ -107,7 +108,7 @@ const displayMovements = function(acc) {
     containerMovements.innerHTML = "";
 
     acc.movements.forEach((mov, i) => {
-        const movType = mov > 0 ? "deposit" : "withdrawal";
+        const movType = typeof mov === "object" ? "loan" : mov > 0 ? "deposit" : "withdrawal";
         const date = new Date(acc.movementDates[i]);
         const formattedDate = formatMovementDate(date, acc.locale);
         const formattedCurrency = formatCurrency(mov, acc.locale, acc.currency);
@@ -124,7 +125,7 @@ const displayMovements = function(acc) {
 
 // Display Balance
 const displayBalance = function(acc) {
-    acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+    acc.balance = acc.movements.reduce((acc, mov) => typeof mov === "object" ? acc + mov.loanValue : acc + mov, 0);
     valueBalance.textContent = formatCurrency(acc.balance, acc.locale, acc.currency);
 }
 
@@ -212,4 +213,25 @@ btnTransfer.addEventListener("click", function(e) {
         updateUI(currentAccount);
         console.log("s");
     }
+})
+
+// Loan Money
+btnLoan.addEventListener("click", function(e) {
+    e.preventDefault();
+    
+    const loanAmount = +inputLoanAmount.value;
+
+    if(loanAmount > 0 && currentAccount.movements.some(mov => mov >= loanAmount * 0.2 && !mov?.type)) {
+        setTimeout(function() {
+            const movLoan = {
+                movType: "loan",
+                loanValue: loanAmount
+            };
+            currentAccount.movements.push(movLoan);
+            currentAccount.movementDates.push(new Date().toISOString());
+            updateUI(currentAccount);
+        }, 3000)
+    }
+    inputLoanAmount.value = "";
+    inputLoanAmount.blur();
 })

@@ -170,6 +170,10 @@ input:focus {
     background: linear-gradient(to bottom right, #f83e3e, #c10909);
 }
 
+.movement__type--loan {
+    background: linear-gradient(to bottom right, #3ef8a7, #0a7850);
+}
+
 .operations {
     display: flex;
     flex-direction: column;
@@ -193,11 +197,11 @@ input:focus {
 }
 
 .operation__transfer {
-    background: linear-gradient(to bottom right, #fde33e, #ffb916);
+    background: linear-gradient(to bottom right, #f8e14a, #ffb70f);
 }
 
 .operation__loan {
-    background: linear-gradient(to bottom right, #0ee439, #078921);
+    background: linear-gradient(to bottom right, #3ef8a7, #0a7850);
 }
 
 .operation__close--account {
