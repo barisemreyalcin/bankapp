@@ -90,6 +90,7 @@ const account2 = {
 const accounts = [account1, account2];
 
 let currentAccount, timer;
+let isSorted = false;
 
 // FUNCTIONS
 // Create Usernames
@@ -121,10 +122,16 @@ const formatCurrency = function(valueData, locale, currency) {
 }
 
 // Display Movements
-const displayMovements = function(acc) {
+const displayMovements = function(acc, isSorted = false) {
     containerMovements.innerHTML = "";
 
-    acc.movements.forEach((mov, i) => {
+    const movs = isSorted
+        ? acc.movements
+            .slice()
+            .sort((a,b) => a.movValue - b.movValue)
+        : acc.movements;
+    
+    movs.forEach((mov, i) => {
         const date = new Date(acc.movementDates[i]);
         const formattedDate = formatMovementDate(date, acc.locale);
         const formattedCurrency = formatCurrency(mov.movValue, acc.locale, acc.currency);
@@ -230,6 +237,8 @@ btnLogin.addEventListener("click", function(e) {
         // Start or Reset Timer
         if(timer) clearInterval(timer);
         timer = startLogoutTimer();
+
+        isSorted = false;
     }
 })
 
@@ -261,6 +270,8 @@ btnTransfer.addEventListener("click", function(e) {
         // Reset Timer
         clearInterval(timer);
         timer = startLogoutTimer();
+
+        isSorted = false;
     }
 })
 
@@ -280,6 +291,8 @@ btnLoan.addEventListener("click", function(e) {
             currentAccount.movementDates.push(new Date().toISOString());
             updateUI(currentAccount);
 
+            isSorted = false;
+
             // Reset Timer
             clearInterval(timer);
             timer = startLogoutTimer();
@@ -287,6 +300,7 @@ btnLoan.addEventListener("click", function(e) {
     }
     inputLoanAmount.value = "";
     inputLoanAmount.blur();
+
 })
 
 // Close Account
@@ -307,4 +321,11 @@ btnClose.addEventListener("click", function(e) {
     }
 
     inputCloseUsername.value = inputClosePassword.value = "";
+})
+
+// Sort Movements
+btnSort.addEventListener("click", function(e) {
+    e.preventDefault();
+    displayMovements(currentAccount, !isSorted);
+    isSorted = !isSorted;
 })
