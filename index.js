@@ -31,7 +31,16 @@ const timerEl = document.querySelector(".timer");
 // TEST DATA
 const account1 = {
     owner: "Barış Emre Yalçın",
-    movements: [2000, 1200, -150.99, 5000, 12000, -3000, 14500, -2200],
+    movements: [
+        {movType: "deposit", movValue: 2000},
+        {movType: "deposit", movValue: 1200},
+        {movType: "withdrawal", movValue: -150.99},
+        {movType: "deposit", movValue: 5000},
+        {movType: "deposit", movValue: 12000},
+        {movType: "withdrawal", movValue: -3000},
+        {movType: "deposit", movValue: 14500},
+        {movType: "withdrawal", movValue: -2200}
+    ],
     interestRate: 1.2,
     password: 8888,
     movementDates: [
@@ -51,7 +60,16 @@ const account1 = {
 
 const account2 = {
     owner: "Jackson Teller",
-    movements: [50, 130, 250, -200, 300, 550, -325, 1600],
+    movements: [
+        {movType: "deposit", movValue: 50},
+        {movType: "deposit", movValue: 130},
+        {movType: "deposit", movValue: 250},
+        {movType: "withdrawal", movValue: -200},
+        {movType: "deposit", movValue: 300},
+        {movType: "deposit", movValue: 550},
+        {movType: "withdrawal", movValue: -325},
+        {movType: "deposit", movValue: 1600}
+    ],
     interestRate: 1.3,
     password: 1111,
     movementDates: [
@@ -99,8 +117,7 @@ const formatMovementDate = function(date, locale) {
 
 // Format Currency
 const formatCurrency = function(valueData, locale, currency) {
-    const value = typeof valueData === "number" ? valueData : valueData.loanValue;
-    return new Intl.NumberFormat(locale, {style: "currency", currency: currency}).format(value);
+    return new Intl.NumberFormat(locale, {style: "currency", currency: currency}).format(valueData);
 }
 
 // Display Movements
@@ -108,13 +125,12 @@ const displayMovements = function(acc) {
     containerMovements.innerHTML = "";
 
     acc.movements.forEach((mov, i) => {
-        const movType = typeof mov === "object" ? "loan" : mov > 0 ? "deposit" : "withdrawal";
         const date = new Date(acc.movementDates[i]);
         const formattedDate = formatMovementDate(date, acc.locale);
-        const formattedCurrency = formatCurrency(mov, acc.locale, acc.currency);
+        const formattedCurrency = formatCurrency(mov.movValue, acc.locale, acc.currency);
         const html = `
             <div class="movement">
-                <p class="movement__type movement__type--${movType}">${i + 1} ${movType}</p>
+                <p class="movement__type movement__type--${mov.movType}">${i + 1} ${mov.movType}</p>
                 <p class="movement__date">${formattedDate}</p>
                 <p class="movement__value">${formattedCurrency}</p>
             </div>
@@ -125,25 +141,25 @@ const displayMovements = function(acc) {
 
 // Display Balance
 const displayBalance = function(acc) {
-    acc.balance = acc.movements.reduce((acc, mov) => typeof mov === "object" ? acc + mov.loanValue : acc + mov, 0);
+    acc.balance = acc.movements.reduce((acc, mov) => acc + mov.movValue, 0);
     valueBalance.textContent = formatCurrency(acc.balance, acc.locale, acc.currency);
 }
 
 // Display Summary
 const displaySummary = function(acc) {
     const incomes = acc.movements
-        .filter(mov => mov > 0)
-        .reduce((acc, mov) => acc + mov, 0);
+        .filter(mov => mov.movValue > 0)
+        .reduce((acc, mov) => acc + mov.movValue, 0);
     valueSumIn.textContent = formatCurrency(incomes, acc.locale, acc.currency);
 
     const outgoings = acc.movements
-        .filter(mov => mov < 0)
-        .reduce((acc, mov) => acc + mov, 0);
+        .filter(mov => mov.movValue < 0)
+        .reduce((acc, mov) => acc + mov.movValue, 0);
     valueSumOut.textContent = formatCurrency(Math.abs(outgoings), acc.locale, acc.currency);
 
     const interest = acc.movements
-        .filter(mov => mov > 0)
-        .map(deposit => (deposit * acc.interestRate) / 100 )
+        .filter(mov => mov.movValue > 0)
+        .map(({movValue}) => (movValue * acc.interestRate) / 100 )
         .filter(int => int >= 1)
         .reduce((acc, int) => acc + int, 0);
     valueSumInterest.textContent = formatCurrency(interest, acc.locale, acc.currency);
@@ -236,8 +252,8 @@ btnTransfer.addEventListener("click", function(e) {
         currentAccount.username !== receiver?.username &&
         currentAccount.balance >= transferAmount
     ) {
-        currentAccount.movements.push(-transferAmount);
-        receiver.movements.push(convertedTransferAmount);
+        currentAccount.movements.push({movType: "withdrawal", movValue: -transferAmount});
+        receiver.movements.push({movType: "deposit", movValue: convertedTransferAmount});
         currentAccount.movementDates.push(new Date().toISOString());
         receiver.movementDates.push(new Date().toISOString());
         updateUI(currentAccount);
@@ -254,11 +270,11 @@ btnLoan.addEventListener("click", function(e) {
     
     const loanAmount = +inputLoanAmount.value;
 
-    if(loanAmount > 0 && currentAccount.movements.some(mov => mov >= loanAmount * 0.2 && !mov?.type)) {
+    if(loanAmount > 0 && currentAccount.movements.some(mov => mov.movValue >= loanAmount * 0.2 && mov.movType !== "loan")) {
         setTimeout(function() {
             const movLoan = {
                 movType: "loan",
-                loanValue: loanAmount
+                movValue: loanAmount
             };
             currentAccount.movements.push(movLoan);
             currentAccount.movementDates.push(new Date().toISOString());
