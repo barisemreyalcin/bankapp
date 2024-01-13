@@ -71,7 +71,7 @@ const account2 = {
 
 const accounts = [account1, account2];
 
-let currentAccount;
+let currentAccount, timer;
 
 // FUNCTIONS
 // Create Usernames
@@ -156,6 +156,32 @@ const updateUI = function(acc) {
     displaySummary(acc);
 }
 
+// Logout Timer
+const startLogoutTimer = function() {
+    let time = 120;
+
+    const tick = function() {
+        const min = String(Math.floor(time / 60)).padStart(2,0);
+        const sec = String(Math.floor(time % 60)).padStart(2,0);
+
+        timerEl.textContent = `${min}:${sec}`;
+
+        if(time === 0) {
+            clearInterval(timerId);
+            bannerEl.classList.remove("hidden");
+            containerApp.classList.add("hidden");
+            headerText.textContent = `Login to get started`;
+        }
+
+        time--;
+    }
+
+    tick();
+
+    const timerId = setInterval(tick, 1000);
+    return timerId;
+}
+
 // Login
 btnLogin.addEventListener("click", function(e) {
     e.preventDefault();
@@ -184,6 +210,10 @@ btnLogin.addEventListener("click", function(e) {
         }
 
         dateBalance.textContent = new Intl.DateTimeFormat(currentAccount.locale, options).format(now);
+
+        // Start or Reset Timer
+        if(timer) clearInterval(timer);
+        timer = startLogoutTimer();
     }
 })
 
@@ -211,7 +241,10 @@ btnTransfer.addEventListener("click", function(e) {
         currentAccount.movementDates.push(new Date().toISOString());
         receiver.movementDates.push(new Date().toISOString());
         updateUI(currentAccount);
-        console.log("s");
+
+        // Reset Timer
+        clearInterval(timer);
+        timer = startLogoutTimer();
     }
 })
 
@@ -230,6 +263,10 @@ btnLoan.addEventListener("click", function(e) {
             currentAccount.movements.push(movLoan);
             currentAccount.movementDates.push(new Date().toISOString());
             updateUI(currentAccount);
+
+            // Reset Timer
+            clearInterval(timer);
+            timer = startLogoutTimer();
         }, 3000)
     }
     inputLoanAmount.value = "";
@@ -250,7 +287,8 @@ btnClose.addEventListener("click", function(e) {
         bannerEl.classList.remove("hidden");
         containerApp.classList.add("hidden");
 
+        headerText.textContent = `Login to get started`;
     }
-    
+
     inputCloseUsername.value = inputClosePassword.value = "";
 })

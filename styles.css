@@ -253,6 +253,11 @@ input:focus {
     background-color: #b9affe;
 }
 
+.timer {
+    color: #c10909;
+    font-weight: 700;
+}
+
 .banner {
     visibility: hidden;
     height: 0;
@@ -419,6 +424,8 @@ input:focus {
 
     .logout--timer {
         grid-area: timer;
+        align-self: center;
+        text-align: center;
     }
 }
 
