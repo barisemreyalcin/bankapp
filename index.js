@@ -235,3 +235,22 @@ btnLoan.addEventListener("click", function(e) {
     inputLoanAmount.value = "";
     inputLoanAmount.blur();
 })
+
+// Close Account
+btnClose.addEventListener("click", function(e) {
+    e.preventDefault();
+
+    if(
+        currentAccount.username === inputCloseUsername.value &&
+        currentAccount.password === +inputClosePassword.value
+    ) {
+        const currentAccountIndex = accounts.indexOf(currentAccount);
+        accounts.splice(currentAccountIndex, 1);
+        
+        bannerEl.classList.remove("hidden");
+        containerApp.classList.add("hidden");
+
+    }
+    
+    inputCloseUsername.value = inputClosePassword.value = "";
+})
